@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1a3a2a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Dreams">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta name="description" content="A private Jungian dream journal from The Outdoor Practice. Capture, reflect, and track recurring symbols.">
+<style>[hidden]{display:none!important} body{margin:0} img{max-width:100%}</style>
+</head>
+<body>
+<title>Dream Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: one calm column, like a field notebook. Header with the tree mark, three tabs, then the page. */
+:root {
+  --bg: #f5f0e8;
+  --surface: #fbf8f2;
+  --ink: #26302a;
+  --muted: #6b7068;
+  --line: #ddd5c7;
+  --forest: #1a3a2a;
+  --moss: #4f6b42;
+  --ember: #c4622a;
+  --ember-soft: rgba(196, 98, 42, 0.10);
+  --moss-soft: rgba(79, 107, 66, 0.10);
+  --focus: #c4622a;
+  --display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --body: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121915; --surface: #19221c; --ink: #e6e0d4; --muted: #9ca296; --line: #2d3a31;
+    --forest: #d3e2cb; --moss: #8fae7d; --ember: #e08a5a;
+    --ember-soft: rgba(224, 138, 90, 0.14); --moss-soft: rgba(143, 174, 125, 0.12); --focus: #e08a5a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121915; --surface: #19221c; --ink: #e6e0d4; --muted: #9ca296; --line: #2d3a31;
+  --forest: #d3e2cb; --moss: #8fae7d; --ember: #e08a5a;
+  --ember-soft: rgba(224, 138, 90, 0.14); --moss-soft: rgba(143, 174, 125, 0.12); --focus: #e08a5a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 56px;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+h1, h2, h3 { font-family: var(--display); color: var(--forest); font-weight: 600; text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: 2.4rem; font-weight: 500; }
+h2 { font-size: 1.7rem; font-weight: 500; }
+h3 { font-size: 1.25rem; }
+p { margin: 0; }
+button, input, textarea, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+
+/* Header */
+.brand { display: flex; align-items: center; gap: 10px; color: var(--forest); }
+.brand svg { width: 28px; height: 28px; flex: none; }
+.eyebrow { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; color: var(--forest); }
+.head { display: flex; flex-direction: column; gap: 10px; }
+.tagline { font-family: var(--display); font-style: italic; font-size: 1.15rem; color: var(--ember); }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+.tab {
+  background: none; border: 0; padding: 10px 14px 9px; cursor: pointer; color: var(--muted);
+  font-size: 0.9rem; font-weight: 500; border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.tab[aria-selected="true"] { color: var(--forest); border-bottom-color: var(--ember); }
+.store-note { font-size: 0.78rem; color: var(--muted); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 9px 18px;
+  border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 0.9rem; font-weight: 500;
+}
+.btn:hover { border-color: var(--moss); }
+.btn.primary { background: var(--forest); color: var(--bg); border-color: var(--forest); }
+.btn.primary:hover { opacity: 0.92; }
+.btn.danger { color: var(--ember); border-color: var(--ember); background: transparent; }
+.btn.ghost { background: transparent; border-color: transparent; color: var(--muted); padding-inline: 4px; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.spread { justify-content: space-between; }
+
+/* Journal list */
+.list { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.item {
+  display: grid; grid-template-columns: 44px 1fr auto; gap: 4px 12px; align-items: baseline;
+  padding: 14px 4px; border-bottom: 1px solid var(--line); cursor: pointer; background: none; border-inline: 0; border-top: 0; text-align: left; width: 100%;
+}
+.item:hover { background: var(--moss-soft); }
+.num { font-family: var(--display); font-size: 1.5rem; color: var(--ember); font-variant-numeric: tabular-nums lining-nums; line-height: 1; }
+.item-main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.item-title { font-family: var(--display); font-size: 1.25rem; font-weight: 600; color: var(--forest); line-height: 1.2; overflow-wrap: anywhere; }
+.item-meta { font-size: 0.8rem; color: var(--muted); overflow-wrap: anywhere; }
+.item-date { font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.chip { font-size: 0.72rem; padding: 1px 8px; border-radius: 999px; background: var(--moss-soft); color: var(--moss); font-weight: 500; }
+.chip.sym { background: var(--ember-soft); color: var(--ember); }
+.dots { display: inline-flex; gap: 3px; vertical-align: middle; }
+.dots i { width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--moss); display: inline-block; }
+.dots i.on { background: var(--moss); }
+
+.empty { border: 1px dashed var(--line); border-radius: 14px; padding: 28px 22px; display: flex; flex-direction: column; gap: 12px; background: var(--surface); }
+.empty p { color: var(--muted); max-width: 52ch; }
+
+/* Editor */
+.sheet { display: flex; flex-direction: column; gap: 26px; }
+.sheet-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.status { font-size: 0.78rem; color: var(--muted); margin-left: auto; }
+.status.err { color: var(--ember); }
+.section { display: flex; flex-direction: column; gap: 16px; padding-top: 18px; border-top: 1px solid var(--forest); }
+.section-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.section-head .hint { font-family: var(--display); font-style: italic; color: var(--ember); font-size: 1.05rem; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: var(--forest); }
+.label em { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); font-size: 0.8rem; margin-left: 6px; }
+input[type="text"], input[type="date"], input[type="time"], textarea {
+  width: 100%; border: 0; border-bottom: 1px solid var(--line); background: transparent; padding: 6px 2px; border-radius: 0;
+}
+textarea { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--surface); resize: vertical; line-height: 1.65; }
+input:focus, textarea:focus { outline: none; border-color: var(--moss); }
+textarea.big { min-height: 220px; }
+textarea.mid { min-height: 84px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.scale { display: flex; gap: 6px; }
+.scale button {
+  width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--moss); background: transparent; cursor: pointer;
+  font-size: 0.8rem; color: var(--moss); font-variant-numeric: tabular-nums;
+}
+.scale button[aria-pressed="true"] { background: var(--moss); color: var(--bg); }
+.pairs { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 0 14px; }
+.pairs .ph { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding-bottom: 2px; }
+.arch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+.arch label { display: flex; gap: 10px; align-items: center; cursor: pointer; font-size: 0.92rem; }
+.arch input { width: 17px; height: 17px; accent-color: var(--moss); }
+.confirm { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 0.88rem; color: var(--ember); }
+
+/* Symbols */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th { text-align: left; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--forest); font-weight: 600; padding: 8px 6px; border-bottom: 1px solid var(--forest); }
+td { padding: 10px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.n { font-variant-numeric: tabular-nums; color: var(--ember); font-weight: 600; width: 3.5em; }
+td.sym { font-family: var(--display); font-size: 1.15rem; color: var(--forest); font-weight: 600; }
+.bars { display: flex; flex-direction: column; gap: 8px; }
+.bar { display: grid; grid-template-columns: 9.5em 1fr 2em; gap: 10px; align-items: center; font-size: 0.88rem; }
+.bar .track { height: 8px; border-radius: 4px; background: var(--moss-soft); overflow: hidden; }
+.bar .fill { height: 100%; background: var(--moss); border-radius: 4px; }
+.bar .c { font-variant-numeric: tabular-nums; color: var(--muted); text-align: right; }
+
+/* Guide */
+.guide { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+details { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; padding: 14px 2px; list-style: none; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+summary::-webkit-details-marker { display: none; }
+summary h3 { font-size: 1.35rem; }
+summary .plus { color: var(--ember); font-size: 1.2rem; transition: transform .2s; }
+details[open] summary .plus { transform: rotate(45deg); }
+.g-body { padding: 0 2px 20px; display: flex; flex-direction: column; gap: 10px; max-width: 62ch; }
+.g-lead { font-family: var(--display); font-style: italic; color: var(--ember); font-size: 1.1rem; }
+.g-body ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 8px; }
+.g-body li::marker { color: var(--ember); }
+.g-body strong { color: var(--forest); font-weight: 600; }
+.g-sub { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: var(--forest); margin-top: 6px; }
+
+.foot { font-size: 0.78rem; color: var(--muted); display: flex; gap: 8px; align-items: center; border-top: 1px solid var(--line); padding-top: 14px; }
+.toast { font-size: 0.82rem; color: var(--muted); }
+
+@media (max-width: 520px) {
+  h1 { font-size: 2rem; }
+  .grid3 { grid-template-columns: 1fr 1fr; }
+  .grid3 .wide { grid-column: 1 / -1; }
+  .grid2 { grid-template-columns: 1fr; }
+  .arch { grid-template-columns: 1fr 1fr; }
+  .item { grid-template-columns: 36px 1fr; }
+  .item-date { grid-column: 2; }
+  .bar { grid-template-columns: 7.5em 1fr 1.6em; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <div class="brand">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="var(--moss)" stroke-width="3.5"/>
+        <g stroke="currentColor" stroke-width="3.5" fill="none">
+          <line x1="50" y1="12" x2="50" y2="88"/>
+          <polyline points="32.5,47.5 50,30 67.5,47.5"/>
+          <polyline points="36,59 50,45 64,59"/>
+        </g>
+      </svg>
+      <span class="eyebrow">The Outdoor Practice</span>
+    </div>
+    <h1>Dream Journal</h1>
+    <p class="tagline">Capture on waking. Reflect later.</p>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button class="tab" role="tab" id="tab-journal" data-view="journal" aria-selected="true">Journal</button>
+    <button class="tab" role="tab" id="tab-symbols" data-view="symbols" aria-selected="false">Symbols</button>
+    <button class="tab" role="tab" id="tab-guide" data-view="guide" aria-selected="false">Guide</button>
+  </nav>
+
+  <main id="view" aria-live="polite"></main>
+
+  <footer class="foot">
+    <span id="store-note">Opening your journal…</span>
+  </footer>
+</div>
+
+<template id="guide-tpl">
+  <div class="guide">
+    <details open>
+      <summary><h3>How to use this journal</h3><span class="plus">+</span></summary>
+      <div class="g-body">
+        <p class="g-lead">Take what you need. Everything here is an invitation.</p>
+        <ul>
+          <li><strong>Capture first.</strong> Tap <strong>New dream</strong> on the Journal tab as soon as you wake. Write it rough, in the present tense. It saves as you type.</li>
+          <li><strong>Reflect later.</strong> Come back to the same dream once you've had a brew and fill in the Reflect section.</li>
+          <li><strong>Tag your symbols.</strong> Add a few words to <strong>Symbols to track</strong>, separated by commas. They gather on the Symbols tab with the dreams they appear in.</li>
+          <li><strong>Find a dream.</strong> Tap any dream in the list to open it. <strong>Done</strong> takes you back.</li>
+        </ul>
+        <p class="g-sub">Add it to your home screen</p>
+        <p>It then opens like an app, full screen, with the tree icon.</p>
+        <ul>
+          <li><strong>iPhone.</strong> Open this page in Safari. Tap the <strong>Share</strong> button, then <strong>Add to Home Screen</strong>, then <strong>Add</strong>.</li>
+          <li><strong>Android.</strong> Open this page in Chrome. Tap the <strong>⋮</strong> menu, then <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li>
+          <li><strong>Do this first, then always use the icon.</strong> On iPhone, the home screen version keeps its own copy of your dreams, separate from Safari. Dreams written in one won't show in the other. Safari can also clear data for sites you haven't opened in a while, which home screen apps are protected from.</li>
+        </ul>
+        <p class="g-sub">Keeping your dreams safe</p>
+        <p>The note at the bottom of the page tells you where your dreams are saved.</p>
+        <ul>
+          <li><strong>Saved to your account.</strong> Your dreams follow you across devices.</li>
+          <li><strong>Saved in this browser only.</strong> Your dreams live on this one device. Clearing your browsing data, using a private window or switching browser or phone will lose them.</li>
+          <li><strong>Export now and again.</strong> On the Journal tab, tap <strong>Export</strong> to save a copy of every dream as a text file. Do it every week or so, and always before you clear your browsing data or change phone.</li>
+          <li><strong>Keep your export somewhere safe.</strong> It's a copy to read and keep. It can't be loaded back into the journal.</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary><h3>What Jungian dream work is</h3><span class="plus">+</span></summary>
+      <div class="g-body">
+        <p class="g-lead">A conversation with the part of you that doesn't speak in words.</p>
+        <p>Freud tended to see dreams as disguises, hiding a wish behind a mask. Jung saw it differently. For him the dream wasn't hiding anything. It was showing you how things really stand inside, in the only language the unconscious has: images. So the task isn't to crack a code. It's to listen.</p>
+        <ul>
+          <li><strong>Compensatory.</strong> Dreams often balance a one-sided waking attitude. Push hard in one direction by day and the dream may pull the other way by night.</li>
+          <li><strong>Personal first.</strong> Your associations to an image matter more than anything a book says about it.</li>
+          <li><strong>Two levels.</strong> A figure can be the real person, or a part of you wearing their face. Jung called these the objective and subjective levels. Try both.</li>
+          <li><strong>Forward looking.</strong> Some dreams point back at old wounds. Others point towards what's trying to grow.</li>
+          <li><strong>Read as a series.</strong> One dream is a sentence. Twenty dreams start to tell a story.</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary><h3>What it isn't</h3><span class="plus">+</span></summary>
+      <div class="g-body">
+        <p class="g-lead">Hold it lightly. The dream is usually wiser than the interpretation.</p>
+        <ul>
+          <li><strong>Not a dictionary.</strong> A snake in your dream isn't the same as a snake in mine. Jung was wary of fixed symbol lists. Start with what the image means to you.</li>
+          <li><strong>Not fortune telling.</strong> Dreams speak about the inner situation. They aren't forecasts of events.</li>
+          <li><strong>Not a puzzle you solve once.</strong> A good dream can hold several meanings at once. Come back to it.</li>
+          <li><strong>Not forcing it.</strong> Jung reminded himself that he didn't understand a dream before he began. If nothing lands, let it be. Sometimes the meaning arrives days later, often on a walk.</li>
+          <li><strong>Not only about the past.</strong> Childhood and old patterns show up, but so does the present and what's trying to emerge.</li>
+          <li><strong>Not a replacement for support.</strong> If dreams stir up something heavy, recurring nightmares, or old trauma, bring them to a therapist or someone you trust. You don't have to sit with that alone.</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary><h3>Signs and symbols</h3><span class="plus">+</span></summary>
+      <div class="g-body">
+        <p class="g-lead">A sign points to something known. A symbol points beyond what we can say.</p>
+        <p>Jung drew a clear line here. A road sign or a logo is a <em>sign</em>: it stands for something we already understand. A <em>symbol</em> carries more than words can hold. Part of it stays in shadow, and that's where its power comes from. Dream symbols aren't made up on purpose. They arise by themselves, the way mushrooms push up after rain.</p>
+        <p class="g-sub">How to tell a living symbol</p>
+        <ul>
+          <li><strong>It has charge.</strong> You feel something in the body. It grips, unsettles, or moves you.</li>
+          <li><strong>It won't sit still.</strong> Every explanation feels true but incomplete.</li>
+          <li><strong>It comes back.</strong> Recurring images are asking for attention. Tag them so they show up on the Symbols tab.</li>
+        </ul>
+        <p class="g-sub">Stay close to the image</p>
+        <p>Freud's free association lets one thought lead to the next, often far from the dream. Jung preferred to circle the image itself. What exactly does it look like? What does it remind you of? What does it do?</p>
+      </div>
+    </details>
+    <details>
+      <summary><h3>Myth and the bigger story</h3><span class="plus">+</span></summary>
+      <div class="g-body">
+        <p class="g-lead">Myths are humanity's shared dreams. Dreams are your personal myths.</p>
+        <p>Some dream images feel bigger than one life. A descent underground. A great tree. A journey into the belly of a beast. These turn up in myth, fairy tale and religion across the world. Jung linked them to <em>archetypes</em>: deep patterns in the psyche we all share, which take on different images in different cultures.</p>
+        <p class="g-sub">Amplification</p>
+        <p>When an image feels archetypal, Jung would widen the circle and look at how the same motif appears in myth and story.</p>
+        <ul>
+          <li><strong>The descent.</strong> Inanna, Persephone and Orpheus all go down into the underworld and come back changed.</li>
+          <li><strong>The night sea journey.</strong> Jonah swallowed by the great fish. Being held in the dark before rebirth.</li>
+          <li><strong>The world tree.</strong> Yggdrasil in Norse myth links the worlds above and below. A tree in a dream may be more than a tree.</li>
+        </ul>
+        <p class="g-sub">Go gently</p>
+        <p>Personal associations first, myth second. Myth widens the view. It doesn't replace your own meaning. Treat other cultures' stories with respect: borrow lightly and credit where they come from.</p>
+      </div>
+    </details>
+    <details>
+      <summary><h3>Working with a dream</h3><span class="plus">+</span></summary>
+      <div class="g-body">
+        <p class="g-lead">Six steps. No rush. Everything here is an invitation.</p>
+        <p>This loosely follows Robert A. Johnson's approach in <em>Inner Work</em>, with capture and feeling added at the start.</p>
+        <ul>
+          <li><strong>Write it down.</strong> As it was, in the present tense. Fragments count.</li>
+          <li><strong>Notice the feeling.</strong> Where is it in the body? Feeling is often the clearest thread back in.</li>
+          <li><strong>Associate.</strong> Take each image in turn. What does it mean to you?</li>
+          <li><strong>Connect.</strong> Where is this alive in your life right now? Which part of you might this figure be?</li>
+          <li><strong>Interpret, lightly.</strong> Ask what the dream might be balancing. Choose the meaning that surprises you over the one that flatters you.</li>
+          <li><strong>Honour it.</strong> Do something small and physical. Walk to the place it reminded you of. Light a candle. Sketch the image.</li>
+        </ul>
+        <p>The Capture section of each entry holds the first two steps. Reflect holds the rest.</p>
+      </div>
+    </details>
+    <details>
+      <summary><h3>Further reading</h3><span class="plus">+</span></summary>
+      <div class="g-body">
+        <p class="g-lead">Take what you need. Leave the rest on the shelf.</p>
+        <ul>
+          <li><strong>Man and His Symbols.</strong> Carl Jung and colleagues, 1964. The most accessible way in.</li>
+          <li><strong>Inner Work.</strong> Robert A. Johnson, 1986. A practical, plain-spoken guide to dreams and active imagination.</li>
+          <li><strong>Memories, Dreams, Reflections.</strong> Carl Jung's late-life autobiography, full of his own dreams.</li>
+          <li><strong>Dreams.</strong> Carl Jung. His key essays on dreams, drawn from the Collected Works.</li>
+        </ul>
+        <p>rewildingtherapies.com</p>
+      </div>
+    </details>
+  </div>
+</template>
+
+<script>
+const ARCH = ["Shadow", "Anima / Animus", "Persona", "Self", "Mother", "Elder / Father", "Trickster", "Child", "Hero", "Other"];
+const LOCAL_KEY = "top-dream-journal-v1";
+
+const state = {
+  view: "journal",
+  dreams: [],           // [{id, ...fields}]
+  editingId: null,
+  draft: null,
+  dirty: false,
+  mode: "loading",      // loading | cloud | local
+  confirmDelete: false,
+  status: "",
+  statusErr: false,
+};
+
+let db = null, uid = null, col = null, saveTimer = null, saving = Promise.resolve(), downloads = null;
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const today = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+const fmtDate = (s) => { if (!s) return ""; const d = new Date(s + "T12:00:00"); return isNaN(d) ? s : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }); };
+const tags = (s) => String(s || "").split(",").map(t => t.trim()).filter(Boolean);
+
+function blank() {
+  return {
+    date: today(), title: "", woke: "", vivid: 0, mood: "", dream: "",
+    setting: "", figures: "", keyImage: "", feeling: "", symbols: "",
+    context: "", images: ["", "", "", ""], assocs: ["", "", "", ""], archetypes: [],
+    compensation: "", series: "", ask: "", created: Date.now(),
+  };
+}
+
+function sorted() {
+  return [...state.dreams].sort((a, b) => (a.date || "").localeCompare(b.date || "") || (a.created || 0) - (b.created || 0));
+}
+function numberOf(id) { const i = sorted().findIndex(d => d.id === id); return i < 0 ? sorted().length + 1 : i + 1; }
+const pad = (n) => String(n).padStart(2, "0");
+
+/* ---------- Storage ---------- */
+function loadLocal() {
+  try { const raw = localStorage.getItem(LOCAL_KEY); state.dreams = raw ? JSON.parse(raw) : []; } catch (e) { state.dreams = []; }
+}
+function saveLocalAll() {
+  try { localStorage.setItem(LOCAL_KEY, JSON.stringify(state.dreams)); return true; } catch (e) { return false; }
+}
+
+async function init() {
+  render();
+  try {
+    if (window.claude && claude.use) {
+      const [d, u, dl] = await Promise.all([claude.use("db"), claude.use("user"), claude.use("downloads")]);
+      downloads = dl;
+      const id = u ? await u.id() : null;
+      const canWrite = u ? await u.can("data.write") : null;
+      if (d && id && canWrite !== false) {
+        db = d; uid = id; col = db.collection("data/users/" + uid);
+        state.mode = "cloud";
+        col.onSnapshot(snap => {
+          const incoming = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          state.dreams = incoming;
+          if (state.editingId && !state.dirty) {
+            const fresh = incoming.find(x => x.id === state.editingId);
+            if (fresh) state.draft = structuredClone(fresh);
+          }
+          if (state.view !== "edit") render(); else updateNote();
+        }, () => { state.status = "Lost connection to your journal. Reload to try again."; state.statusErr = true; render(); });
+        updateNote();
+        return;
+      }
+    }
+  } catch (e) { /* fall through to local */ }
+  state.mode = "local"; loadLocal(); render();
+}
+
+function persist() {
+  if (!state.draft) return;
+  const data = structuredClone(state.draft);
+  const id = state.editingId; delete data.id;
+  state.status = "Saving…"; state.statusErr = false; paintStatus();
+  if (state.mode === "cloud") {
+    saving = saving.then(() => col.doc(id).set(data)).then(() => {
+      state.dirty = false; state.status = "Saved"; paintStatus();
+    }).catch(err => {
+      if (err && err.code === "invalid_argument") {
+        state.mode = "local"; loadLocal();
+        const i = state.dreams.findIndex(x => x.id === id);
+        if (i < 0) state.dreams.push({ id, ...data }); else state.dreams[i] = { id, ...data };
+        const ok = saveLocalAll();
+        state.dirty = false; state.statusErr = !ok;
+        state.status = ok ? "Saved on this device" : "Couldn't save in this browser";
+        updateNote(); paintStatus(); return;
+      }
+      state.statusErr = true;
+      state.status = err && err.code === "quota_exceeded" ? "Your journal is full. Delete an old entry to save this one." : "Couldn't save just now. Keep this page open and try again in a moment.";
+      paintStatus();
+    });
+  } else {
+    const i = state.dreams.findIndex(d => d.id === id);
+    const rec = { id, ...data };
+    if (i < 0) state.dreams.push(rec); else state.dreams[i] = rec;
+    const ok = saveLocalAll();
+    state.dirty = false; state.status = ok ? "Saved on this device" : "Couldn't save in this browser"; state.statusErr = !ok; paintStatus();
+  }
+}
+function scheduleSave() {
+  state.dirty = true; state.status = "Editing…"; state.statusErr = false; paintStatus();
+  clearTimeout(saveTimer); saveTimer = setTimeout(persist, 900);
+}
+function flush() { if (state.dirty) { clearTimeout(saveTimer); persist(); } }
+
+async function removeDream(id) {
+  if (state.mode === "cloud") {
+    try { await saving; await col.doc(id).delete(); } catch (e) { state.status = "Couldn't delete. Try again."; state.statusErr = true; paintStatus(); return; }
+  } else {
+    state.dreams = state.dreams.filter(d => d.id !== id); saveLocalAll();
+  }
+  state.dreams = state.dreams.filter(d => d.id !== id);
+  state.editingId = null; state.draft = null; state.dirty = false; state.confirmDelete = false;
+  go("journal");
+}
+
+/* ---------- Navigation ---------- */
+function go(view) {
+  if (state.view === "edit" && view !== "edit") flush();
+  state.view = view;
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.view === view || (view === "edit" && t.dataset.view === "journal"))));
+  render(); window.scrollTo({ top: 0 });
+}
+function openDream(id) {
+  const d = state.dreams.find(x => x.id === id);
+  state.editingId = id; state.draft = structuredClone({ ...blank(), ...d }); state.dirty = false;
+  state.confirmDelete = false; state.status = ""; go("edit");
+}
+function newDream() {
+  const id = "dream-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  state.editingId = id; state.draft = blank(); state.confirmDelete = false; state.status = "";
+  state.dirty = false; go("edit");
+}
+
+/* ---------- Rendering ---------- */
+function updateNote() {
+  const n = $("#store-note");
+  if (state.mode === "cloud") n.textContent = "Private to you. Saved to your account, so it follows you across devices.";
+  else if (state.mode === "local") n.textContent = "Saved in this browser only, on this device. Export a copy now and again, and always before clearing your browsing data.";
+  else n.textContent = "Opening your journal…";
+}
+function paintStatus() { const s = $("#status"); if (s) { s.textContent = state.status; s.classList.toggle("err", state.statusErr); } }
+
+function render() {
+  updateNote();
+  const v = $("#view");
+  if (state.mode === "loading") { v.innerHTML = `<p class="toast">Opening your journal…</p>`; return; }
+  if (state.view === "journal") v.innerHTML = journalHTML();
+  else if (state.view === "symbols") v.innerHTML = symbolsHTML();
+  else if (state.view === "guide") { v.innerHTML = ""; v.appendChild($("#guide-tpl").content.cloneNode(true)); }
+  else if (state.view === "edit") { v.innerHTML = editHTML(); bindEditor(); }
+}
+
+function vividDots(n) { return `<span class="dots" aria-label="Vividness ${n || 0} of 5">${[1,2,3,4,5].map(i => `<i class="${i <= n ? "on" : ""}"></i>`).join("")}</span>`; }
+
+function journalHTML() {
+  const list = sorted().reverse();
+  const top = `<div class="row spread"><h2>${list.length ? list.length + (list.length === 1 ? " dream" : " dreams") : "Your dreams"}</h2>
+    <div class="row">${list.length ? `<button class="btn ghost" id="export">Export</button>` : ""}<button class="btn primary" id="new">+ New dream</button></div></div>`;
+  if (!list.length) {
+    return `<div class="sheet">${top}
+      <div class="empty">
+        <h3>Nothing here yet</h3>
+        <p>Your dreams will gather here, newest first, with their key image and any archetypes you noticed. Tap <strong>New dream</strong> the moment you wake. Capture it rough, then come back later to reflect.</p>
+        <p>New to this? The <strong>Guide</strong> tab starts with how to use this journal, then six short pages on Jungian dream work.</p>
+      </div></div>${exportStatus()}`;
+  }
+  const total = sorted();
+  return `<div class="sheet">${top}<div class="list">${list.map(d => {
+    const n = total.indexOf(d) + 1;
+    const syms = tags(d.symbols).slice(0, 4);
+    const arch = (d.archetypes || []).slice(0, 3);
+    return `<button class="item" data-id="${esc(d.id)}">
+      <span class="num">${pad(n)}</span>
+      <span class="item-main">
+        <span class="item-title">${esc(d.title || "Untitled dream")}</span>
+        <span class="item-meta">${d.keyImage ? esc(d.keyImage) + " · " : ""}${d.mood ? esc(d.mood) + " · " : ""}${vividDots(d.vivid)}</span>
+        ${syms.length || arch.length ? `<span class="chips">${syms.map(s => `<span class="chip sym">${esc(s)}</span>`).join("")}${arch.map(a => `<span class="chip">${esc(a)}</span>`).join("")}</span>` : ""}
+      </span>
+      <span class="item-date">${esc(fmtDate(d.date))}</span>
+    </button>`;
+  }).join("")}</div></div>${exportStatus()}`;
+}
+let exportMsg = "";
+function exportStatus() { return exportMsg ? `<p class="toast">${esc(exportMsg)}</p>` : ""; }
+
+function symbolsHTML() {
+  const all = sorted();
+  const map = new Map();
+  all.forEach((d, i) => tags(d.symbols).forEach(t => {
+    const k = t.toLowerCase(); if (!map.has(k)) map.set(k, { name: t, nums: [] });
+    const e = map.get(k); if (!e.nums.includes(i + 1)) e.nums.push(i + 1);
+  }));
+  const syms = [...map.values()].sort((a, b) => b.nums.length - a.nums.length || a.name.localeCompare(b.name));
+  const counts = ARCH.map(a => ({ a, c: all.filter(d => (d.archetypes || []).includes(a)).length })).filter(x => x.c).sort((x, y) => y.c - x.c);
+  const max = Math.max(1, ...counts.map(x => x.c));
+  return `<div class="sheet">
+    <div class="field"><h2>Recurring figures and symbols</h2><p class="toast">Built from the symbols you tag in each dream. Jung read dreams as a series. This is where the series shows.</p></div>
+    ${syms.length ? `<div class="table-wrap"><table><thead><tr><th>Symbol</th><th>Times</th><th>Dream nºs</th></tr></thead><tbody>
+      ${syms.map(s => `<tr><td class="sym">${esc(s.name)}</td><td class="n">${s.nums.length}</td><td>${s.nums.map(pad).join(", ")}</td></tr>`).join("")}
+    </tbody></table></div>` : `<div class="empty"><p>No symbols yet. In each dream, add a few to <strong>Symbols to track</strong>, separated by commas. Water, the house, a stag. They'll collect here with the dreams they appear in.</p></div>`}
+    <div class="field"><h3>Archetypes noticed</h3></div>
+    ${counts.length ? `<div class="bars">${counts.map(x => `<div class="bar"><span>${esc(x.a)}</span><span class="track"><span class="fill" style="width:${(x.c / max) * 100}%"></span></span><span class="c">${x.c}</span></div>`).join("")}</div>`
+      : `<p class="toast">Tick archetypes in the Reflect section of a dream and they'll be counted here.</p>`}
+  </div>`;
+}
+
+function editHTML() {
+  const d = state.draft; const n = numberOf(state.editingId);
+  const exists = state.dreams.some(x => x.id === state.editingId);
+  const pairRows = [0, 1, 2, 3].map(i => `
+    <input type="text" id="img${i}" data-arr="images" data-i="${i}" value="${esc(d.images[i])}" aria-label="Image ${i + 1}" placeholder="${i === 0 ? "e.g. the flooded house" : ""}">
+    <input type="text" id="assoc${i}" data-arr="assocs" data-i="${i}" value="${esc(d.assocs[i])}" aria-label="What image ${i + 1} means to me">`).join("");
+  return `<div class="sheet">
+    <div class="row"><button class="btn ghost" id="back">← All dreams</button></div>
+    <div class="sheet-head"><h2>Dream ${pad(n)}</h2><span class="status" id="status" role="status"></span></div>
+
+    <section class="section">
+      <div class="section-head"><h3>Capture</h3><span class="hint">on waking, fast and rough</span></div>
+      <div class="grid3">
+        <div class="field"><label class="label" for="date">Date</label><input type="date" id="date" data-k="date" value="${esc(d.date)}"></div>
+        <div class="field"><label class="label" for="woke">Woke at</label><input type="time" id="woke" data-k="woke" value="${esc(d.woke)}"></div>
+        <div class="field wide"><span class="label">Vivid</span><div class="scale" id="vivid">${[1,2,3,4,5].map(i => `<button type="button" data-v="${i}" aria-pressed="${d.vivid === i}" aria-label="Vividness ${i}">${i}</button>`).join("")}</div></div>
+      </div>
+      <div class="field"><label class="label" for="title">Title</label><input type="text" id="title" data-k="title" value="${esc(d.title)}" placeholder="A few words to find it again"></div>
+      <div class="field"><label class="label" for="dream">The dream <em>present tense, as it happened, no editing</em></label><textarea id="dream" class="big" data-k="dream" placeholder="I am walking through…">${esc(d.dream)}</textarea></div>
+      <div class="grid2">
+        <div class="field"><label class="label" for="setting">Setting</label><input type="text" id="setting" data-k="setting" value="${esc(d.setting)}"></div>
+        <div class="field"><label class="label" for="figures">Figures</label><input type="text" id="figures" data-k="figures" value="${esc(d.figures)}"></div>
+        <div class="field"><label class="label" for="keyImage">Key image</label><input type="text" id="keyImage" data-k="keyImage" value="${esc(d.keyImage)}"></div>
+        <div class="field"><label class="label" for="feeling">Feeling</label><input type="text" id="feeling" data-k="feeling" value="${esc(d.feeling)}"></div>
+        <div class="field"><label class="label" for="mood">Mood on waking</label><input type="text" id="mood" data-k="mood" value="${esc(d.mood)}"></div>
+        <div class="field"><label class="label" for="symbols">Symbols to track <em>comma separated</em></label><input type="text" id="symbols" data-k="symbols" value="${esc(d.symbols)}" placeholder="water, house"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h3>Reflect</h3><span class="hint">later, once you've had a brew</span></div>
+      <div class="field"><label class="label" for="context">Context <em>what was alive in me yesterday?</em></label><textarea id="context" class="mid" data-k="context">${esc(d.context)}</textarea></div>
+      <div class="field"><span class="label">Associations <em>stay close to each image</em></span>
+        <div class="pairs"><span class="ph">Image</span><span class="ph">What it means to me</span>${pairRows}</div></div>
+      <div class="field"><span class="label">Archetypes present <em>starting points, not boxes</em></span>
+        <div class="arch">${ARCH.map((a, i) => `<label><input type="checkbox" id="arch${i}" data-arch="${esc(a)}" ${d.archetypes.includes(a) ? "checked" : ""}>${esc(a)}</label>`).join("")}</div></div>
+      <div class="field"><label class="label" for="compensation">Compensation <em>what attitude might this be balancing?</em></label><textarea id="compensation" class="mid" data-k="compensation">${esc(d.compensation)}</textarea></div>
+      <div class="field"><label class="label" for="series">Series <em>links to other dream nºs</em></label><input type="text" id="series" data-k="series" value="${esc(d.series)}" placeholder="03, 07"></div>
+      <div class="field"><label class="label" for="ask">What does the dream ask of me?</label><textarea id="ask" class="mid" data-k="ask">${esc(d.ask)}</textarea></div>
+    </section>
+
+    <div class="row spread">
+      <button class="btn primary" id="done">Done</button>
+      ${exists ? (state.confirmDelete
+        ? `<span class="confirm">Delete this dream for good? <button class="btn danger" id="del-yes">Delete</button><button class="btn ghost" id="del-no">Keep it</button></span>`
+        : `<button class="btn ghost" id="del">Delete dream</button>`) : ""}
+    </div>
+  </div>`;
+}
+
+function bindEditor() {
+  paintStatus();
+  const v = $("#view");
+  v.querySelectorAll("[data-k]").forEach(el => el.addEventListener("input", () => { state.draft[el.dataset.k] = el.value; scheduleSave(); }));
+  v.querySelectorAll("[data-arr]").forEach(el => el.addEventListener("input", () => { state.draft[el.dataset.arr][+el.dataset.i] = el.value; scheduleSave(); }));
+  v.querySelectorAll("[data-arch]").forEach(el => el.addEventListener("change", () => {
+    const a = el.dataset.arch, set = new Set(state.draft.archetypes);
+    el.checked ? set.add(a) : set.delete(a); state.draft.archetypes = ARCH.filter(x => set.has(x)); scheduleSave();
+  }));
+  $("#vivid").addEventListener("click", e => {
+    const b = e.target.closest("button[data-v]"); if (!b) return;
+    const val = +b.dataset.v; state.draft.vivid = state.draft.vivid === val ? 0 : val;
+    $("#vivid").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(+x.dataset.v === state.draft.vivid)));
+    scheduleSave();
+  });
+  $("#back").onclick = () => go("journal");
+  $("#done").onclick = () => go("journal");
+  const del = $("#del"); if (del) del.onclick = () => { flush(); state.confirmDelete = true; render(); };
+  const yes = $("#del-yes"); if (yes) yes.onclick = () => removeDream(state.editingId);
+  const no = $("#del-no"); if (no) no.onclick = () => { state.confirmDelete = false; render(); };
+}
+
+function exportText() {
+  return sorted().map((d, i) => {
+    const L = [`# Dream ${pad(i + 1)}: ${d.title || "Untitled"}`, `${fmtDate(d.date)}${d.woke ? " · woke " + d.woke : ""}${d.vivid ? " · vivid " + d.vivid + "/5" : ""}${d.mood ? " · " + d.mood : ""}`, "", d.dream || "", ""];
+    [["Setting", d.setting], ["Figures", d.figures], ["Key image", d.keyImage], ["Feeling", d.feeling], ["Symbols", d.symbols], ["Context", d.context]].forEach(([k, val]) => { if (val) L.push(`**${k}:** ${val}`); });
+    (d.images || []).forEach((im, j) => { if (im || (d.assocs || [])[j]) L.push(`- ${im}: ${(d.assocs || [])[j] || ""}`); });
+    if ((d.archetypes || []).length) L.push(`**Archetypes:** ${d.archetypes.join(", ")}`);
+    [["Compensation", d.compensation], ["Series", d.series], ["What it asks of me", d.ask]].forEach(([k, val]) => { if (val) L.push(`**${k}:** ${val}`); });
+    return L.join("\n");
+  }).join("\n\n---\n\n");
+}
+
+document.addEventListener("click", async e => {
+  const tab = e.target.closest(".tab"); if (tab) { go(tab.dataset.view); return; }
+  if (e.target.closest("#new")) { newDream(); return; }
+  const item = e.target.closest(".item"); if (item) { openDream(item.dataset.id); return; }
+  if (e.target.closest("#export")) {
+    const text = "# Dream Journal\n\n" + exportText() + "\n";
+    if (downloads) {
+      try { await downloads.save({ filename: "dream-journal.md", data: text }); exportMsg = "Exported."; }
+      catch (err) { exportMsg = err && err.code === "declined" ? "" : "Export isn't available here."; }
+    } else {
+      try {
+        const url = URL.createObjectURL(new Blob([text], { type: "text/markdown" }));
+        const a = document.createElement("a"); a.href = url; a.download = "dream-journal-" + today() + ".md";
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+        exportMsg = "Exported. Check your downloads.";
+      } catch (err) { exportMsg = "Export didn't work in this browser."; }
+    }
+    render();
+  }
+});
+window.addEventListener("pagehide", flush);
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") flush(); });
+
+init();
+</script>
+
+</body>
+</html>
