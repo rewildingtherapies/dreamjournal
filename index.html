@@ -144,6 +144,7 @@ textarea.mid { min-height: 84px; }
 .pairs { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 0 14px; }
 .pairs .ph { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding-bottom: 2px; }
 .arch { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+.arch-sub { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
 .arch label { display: flex; gap: 10px; align-items: center; cursor: pointer; font-size: 0.92rem; }
 .arch input { width: 17px; height: 17px; accent-color: var(--moss); }
 .confirm { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 0.88rem; color: var(--ember); }
@@ -310,6 +311,42 @@ details[open] summary .plus { transform: rotate(45deg); }
         <p>Personal associations first, myth second. Myth widens the view. It doesn't replace your own meaning. Treat other cultures' stories with respect: borrow lightly and credit where they come from.</p>
       </div>
     </details>
+    <details id="g-twelve">
+      <summary><h3>Archetypes: Jung's core and the twelve</h3><span class="plus">+</span></summary>
+      <div class="g-body">
+        <p class="g-lead">Patterns, not boxes. They show up as people, animals, places and moods.</p>
+        <p>Jung saw archetypes as deep patterns we all share, not a fixed list. He wrote most about a handful of core figures.</p>
+        <p class="g-sub">Jung's core</p>
+        <ul>
+          <li><strong>Shadow.</strong> The parts of ourselves we reject or don't see. Often appears as someone who irritates, frightens or chases us. It holds gold as well as darkness.</li>
+          <li><strong>Anima / Animus.</strong> The inner other, often a figure of a different gender. A guide to feeling, depth and creativity.</li>
+          <li><strong>Persona.</strong> The mask we wear for the world. Dreams of clothes, uniforms or being exposed often point here.</li>
+          <li><strong>Self.</strong> The whole of us, the centre that holds it all. Can appear as a circle, a mandala, a wise figure or a sacred place.</li>
+        </ul>
+        <p class="g-sub">The twelve</p>
+        <p>The popular twelve archetypes come from Carol S. Pearson, building on Jung's ideas, in <em>Awakening the Heroes Within</em> and later <em>The Hero and the Outlaw</em> with Margaret Mark. Each has a gift and a shadow side.</p>
+        <ul>
+          <li><strong>Innocent.</strong> Trust, hope and goodness. Shadow: denial, not seeing what's real.</li>
+          <li><strong>Everyperson</strong> (also called the Orphan). Belonging, realism, being one of us. Shadow: losing yourself to fit in.</li>
+          <li><strong>Hero</strong> (or Warrior). Courage, rising to the challenge. Shadow: always needing a battle to prove your worth.</li>
+          <li><strong>Caregiver.</strong> Nurture and protection. Shadow: giving until you're empty.</li>
+          <li><strong>Explorer</strong> (or Seeker). Freedom and the call of the unknown. Shadow: restlessness, never landing.</li>
+          <li><strong>Rebel</strong> (or Outlaw). Breaking what no longer works. Shadow: destruction for its own sake.</li>
+          <li><strong>Lover.</strong> Intimacy, passion, beauty. Shadow: losing yourself in another.</li>
+          <li><strong>Creator.</strong> Imagination, making something new. Shadow: perfectionism.</li>
+          <li><strong>Jester</strong> (or Fool). Play, joy, living in the moment. Shadow: hiding pain behind a joke.</li>
+          <li><strong>Sage.</strong> Truth and understanding. Shadow: living in your head, cut off from feeling.</li>
+          <li><strong>Magician.</strong> Transformation, making things happen. Shadow: manipulation.</li>
+          <li><strong>Ruler.</strong> Order, responsibility, holding things together. Shadow: control for its own sake.</li>
+        </ul>
+        <p class="g-sub">Using them</p>
+        <ul>
+          <li>Tick any you notice in a dream figure, or in how you were in the dream.</li>
+          <li>Over time, the Symbols tab shows which archetypes visit you most.</li>
+          <li>Personal meaning first. If a figure doesn't fit any of these, tick Other and describe it in your own words.</li>
+        </ul>
+      </div>
+    </details>
     <details>
       <summary><h3>Working with a dream</h3><span class="plus">+</span></summary>
       <div class="g-body">
@@ -332,6 +369,7 @@ details[open] summary .plus { transform: rotate(45deg); }
         <p class="g-lead">Take what you need. Leave the rest on the shelf.</p>
         <ul>
           <li><strong>Man and His Symbols.</strong> Carl Jung and colleagues, 1964. The most accessible way in.</li>
+          <li><strong>Awakening the Heroes Within.</strong> Carol S. Pearson. The twelve archetypes, and how they shape a life.</li>
           <li><strong>Inner Work.</strong> Robert A. Johnson, 1986. A practical, plain-spoken guide to dreams and active imagination.</li>
           <li><strong>Memories, Dreams, Reflections.</strong> Carl Jung's late-life autobiography, full of his own dreams.</li>
           <li><strong>Dreams.</strong> Carl Jung. His key essays on dreams, drawn from the Collected Works.</li>
@@ -343,7 +381,9 @@ details[open] summary .plus { transform: rotate(45deg); }
 </template>
 
 <script>
-const ARCH = ["Shadow", "Anima / Animus", "Persona", "Self", "Mother", "Elder / Father", "Trickster", "Child", "Hero", "Other"];
+const CORE = ["Shadow", "Anima / Animus", "Persona", "Self"];
+const TWELVE = ["Innocent", "Everyperson", "Hero", "Caregiver", "Explorer", "Rebel", "Lover", "Creator", "Jester", "Sage", "Magician", "Ruler"];
+const ARCH = [...CORE, ...TWELVE, "Other"];
 const LOCAL_KEY = "top-dream-journal-v1";
 
 const state = {
@@ -542,7 +582,8 @@ function symbolsHTML() {
     const e = map.get(k); if (!e.nums.includes(i + 1)) e.nums.push(i + 1);
   }));
   const syms = [...map.values()].sort((a, b) => b.nums.length - a.nums.length || a.name.localeCompare(b.name));
-  const counts = ARCH.map(a => ({ a, c: all.filter(d => (d.archetypes || []).includes(a)).length })).filter(x => x.c).sort((x, y) => y.c - x.c);
+  const names = [...new Set(all.flatMap(d => d.archetypes || []))];
+  const counts = names.map(a => ({ a, c: all.filter(d => (d.archetypes || []).includes(a)).length })).filter(x => x.c).sort((x, y) => y.c - x.c);
   const max = Math.max(1, ...counts.map(x => x.c));
   return `<div class="sheet">
     <div class="field"><h2>Recurring figures and symbols</h2><p class="toast">Built from the symbols you tag in each dream. Jung read dreams as a series. This is where the series shows.</p></div>
@@ -590,7 +631,10 @@ function editHTML() {
       <div class="field"><span class="label">Associations <em>stay close to each image</em></span>
         <div class="pairs"><span class="ph">Image</span><span class="ph">What it means to me</span>${pairRows}</div></div>
       <div class="field"><span class="label">Archetypes present <em>starting points, not boxes</em></span>
-        <div class="arch">${ARCH.map((a, i) => `<label><input type="checkbox" id="arch${i}" data-arch="${esc(a)}" ${d.archetypes.includes(a) ? "checked" : ""}>${esc(a)}</label>`).join("")}</div></div>
+        ${archGroup("Jung's core", CORE, d)}
+        ${archGroup("The twelve", [...TWELVE, "Other"], d)}
+        ${(() => { const old = d.archetypes.filter(a => !ARCH.includes(a)); return old.length ? archGroup("From earlier", old, d) : ""; })()}
+        <a class="toast" href="#" data-guide="g-twelve">What do these mean?</a></div>
       <div class="field"><label class="label" for="compensation">Compensation <em>what attitude might this be balancing?</em></label><textarea id="compensation" class="mid" data-k="compensation">${esc(d.compensation)}</textarea></div>
       <div class="field"><label class="label" for="series">Series <em>links to other dream nºs</em></label><input type="text" id="series" data-k="series" value="${esc(d.series)}" placeholder="03, 07"></div>
       <div class="field"><label class="label" for="ask">What does the dream ask of me?</label><textarea id="ask" class="mid" data-k="ask">${esc(d.ask)}</textarea></div>
@@ -605,6 +649,9 @@ function editHTML() {
   </div>`;
 }
 
+function archGroup(title, list, d) {
+  return `<span class="arch-sub">${esc(title)}</span><div class="arch">${list.map(a => `<label><input type="checkbox" id="arch-${esc(a.replace(/[^a-z]/gi, ""))}" data-arch="${esc(a)}" ${d.archetypes.includes(a) ? "checked" : ""}>${esc(a)}</label>`).join("")}</div>`;
+}
 function bindEditor() {
   paintStatus();
   const v = $("#view");
@@ -612,7 +659,7 @@ function bindEditor() {
   v.querySelectorAll("[data-arr]").forEach(el => el.addEventListener("input", () => { state.draft[el.dataset.arr][+el.dataset.i] = el.value; scheduleSave(); }));
   v.querySelectorAll("[data-arch]").forEach(el => el.addEventListener("change", () => {
     const a = el.dataset.arch, set = new Set(state.draft.archetypes);
-    el.checked ? set.add(a) : set.delete(a); state.draft.archetypes = ARCH.filter(x => set.has(x)); scheduleSave();
+    el.checked ? set.add(a) : set.delete(a); state.draft.archetypes = [...ARCH.filter(x => set.has(x)), ...[...set].filter(x => !ARCH.includes(x))]; scheduleSave();
   }));
   $("#vivid").addEventListener("click", e => {
     const b = e.target.closest("button[data-v]"); if (!b) return;
@@ -640,6 +687,7 @@ function exportText() {
 
 document.addEventListener("click", async e => {
   const tab = e.target.closest(".tab"); if (tab) { go(tab.dataset.view); return; }
+  const gl = e.target.closest("[data-guide]"); if (gl) { e.preventDefault(); go("guide"); const d = document.getElementById(gl.dataset.guide); if (d) { d.open = true; d.scrollIntoView({ block: "start" }); } return; }
   if (e.target.closest("#new")) { newDream(); return; }
   const item = e.target.closest(".item"); if (item) { openDream(item.dataset.id); return; }
   if (e.target.closest("#export")) {
