@@ -11,7 +11,44 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
 <meta name="description" content="A private Jungian dream journal from The Outdoor Practice. Capture, reflect, and track recurring symbols.">
-<style>[hidden]{display:none!important} body{margin:0} img{max-width:100%}</style>
+<style>[hidden]{display:none!important} body{margin:0} img{max-width:100%}
+/* Course */
+.course { display: flex; flex-direction: column; gap: 18px; }
+.c-head { display: flex; flex-direction: column; gap: 10px; }
+.c-prog { height: 6px; border-radius: 3px; background: var(--moss-soft); overflow: hidden; }
+.c-prog span { display: block; height: 100%; background: var(--moss); border-radius: 3px; }
+.lessons { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.lesson-row { width: 100%; display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: center; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--line); padding: 13px 2px; cursor: pointer; }
+.lesson-row:hover { background: var(--moss-soft); }
+.l-num { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--moss); color: var(--moss); display: grid; place-items: center; font-size: 0.82rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.l-num.done { background: var(--moss); color: var(--bg); }
+.l-main { min-width: 0; display: flex; flex-direction: column; }
+.l-title { font-family: var(--display); font-size: 1.2rem; font-weight: 600; color: var(--forest); line-height: 1.2; }
+.l-sub { font-size: 0.8rem; color: var(--muted); }
+.l-meta { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.c-lesson h2 { font-size: 1.6rem; }
+.c-lead { font-family: var(--display); font-style: italic; color: var(--ember); font-size: 1.1rem; }
+.c-card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px 22px 24px; display: flex; flex-direction: column; gap: 12px; min-height: 300px; animation: cardIn .25s ease-out; }
+@keyframes cardIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.c-count { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: var(--ember); }
+.c-card h3 { font-size: 1.55rem; }
+.c-body { display: flex; flex-direction: column; gap: 10px; font-size: 1rem; line-height: 1.65; max-width: 60ch; }
+.c-body p { margin: 0; }
+.c-body ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 9px; }
+.c-body li::marker { color: var(--ember); }
+.c-body strong { color: var(--forest); font-weight: 600; }
+.c-try { margin-top: auto; border-left: 3px solid var(--moss); background: var(--moss-soft); border-radius: 0 10px 10px 0; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px; }
+.c-try span { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; color: var(--moss); }
+.c-try p { margin: 0; font-size: 0.93rem; }
+.c-dots { display: flex; gap: 6px; justify-content: center; }
+.c-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+.c-dots i.past { background: var(--moss); opacity: 0.5; }
+.c-dots i.on { background: var(--ember); width: 18px; border-radius: 4px; }
+.btn:disabled { opacity: 0.45; cursor: default; }
+@media (prefers-reduced-motion: reduce) { .c-card { animation: none; } }
+@media (max-width: 520px) { .lesson-row { grid-template-columns: 34px 1fr; } .l-meta { display: none; } .c-card { padding: 18px 16px 20px; min-height: 340px; } }
+</style>
 </head>
 <body>
 <title>Dream Journal</title>
@@ -223,163 +260,6 @@ details[open] summary .plus { transform: rotate(45deg); }
   </footer>
 </div>
 
-<template id="guide-tpl">
-  <div class="guide">
-    <details open>
-      <summary><h3>How to use this journal</h3><span class="plus">+</span></summary>
-      <div class="g-body">
-        <p class="g-lead">Take what you need. Everything here is an invitation.</p>
-        <ul>
-          <li><strong>Capture first.</strong> Tap <strong>New dream</strong> on the Journal tab as soon as you wake. Write it rough, in the present tense. It saves as you type.</li>
-          <li><strong>Reflect later.</strong> Come back to the same dream once you've had a brew and fill in the Reflect section.</li>
-          <li><strong>Tag your symbols.</strong> Add a few words to <strong>Symbols to track</strong>, separated by commas. They gather on the Symbols tab with the dreams they appear in.</li>
-          <li><strong>Find a dream.</strong> Tap any dream in the list to open it. <strong>Done</strong> takes you back.</li>
-        </ul>
-        <p class="g-sub">Add it to your home screen</p>
-        <p>It then opens like an app, full screen, with the tree icon.</p>
-        <ul>
-          <li><strong>iPhone.</strong> Open this page in Safari. Tap the <strong>Share</strong> button, then <strong>Add to Home Screen</strong>, then <strong>Add</strong>.</li>
-          <li><strong>Android.</strong> Open this page in Chrome. Tap the <strong>⋮</strong> menu, then <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li>
-          <li><strong>Do this first, then always use the icon.</strong> On iPhone, the home screen version keeps its own copy of your dreams, separate from Safari. Dreams written in one won't show in the other. Safari can also clear data for sites you haven't opened in a while, which home screen apps are protected from.</li>
-        </ul>
-        <p class="g-sub">Keeping your dreams safe</p>
-        <p>The note at the bottom of the page tells you where your dreams are saved.</p>
-        <ul>
-          <li><strong>Saved to your account.</strong> Your dreams follow you across devices.</li>
-          <li><strong>Saved in this browser only.</strong> Your dreams live on this one device. Clearing your browsing data, using a private window or switching browser or phone will lose them.</li>
-          <li><strong>Export now and again.</strong> On the Journal tab, tap <strong>Export</strong> to save a copy of every dream as a text file. Do it every week or so, and always before you clear your browsing data or change phone.</li>
-          <li><strong>Keep your export somewhere safe.</strong> It's a copy to read and keep. It can't be loaded back into the journal.</li>
-        </ul>
-      </div>
-    </details>
-    <details>
-      <summary><h3>What Jungian dream work is</h3><span class="plus">+</span></summary>
-      <div class="g-body">
-        <p class="g-lead">A conversation with the part of you that doesn't speak in words.</p>
-        <p>Freud tended to see dreams as disguises, hiding a wish behind a mask. Jung saw it differently. For him the dream wasn't hiding anything. It was showing you how things really stand inside, in the only language the unconscious has: images. So the task isn't to crack a code. It's to listen.</p>
-        <ul>
-          <li><strong>Compensatory.</strong> Dreams often balance a one-sided waking attitude. Push hard in one direction by day and the dream may pull the other way by night.</li>
-          <li><strong>Personal first.</strong> Your associations to an image matter more than anything a book says about it.</li>
-          <li><strong>Two levels.</strong> A figure can be the real person, or a part of you wearing their face. Jung called these the objective and subjective levels. Try both.</li>
-          <li><strong>Forward looking.</strong> Some dreams point back at old wounds. Others point towards what's trying to grow.</li>
-          <li><strong>Read as a series.</strong> One dream is a sentence. Twenty dreams start to tell a story.</li>
-        </ul>
-      </div>
-    </details>
-    <details>
-      <summary><h3>What it isn't</h3><span class="plus">+</span></summary>
-      <div class="g-body">
-        <p class="g-lead">Hold it lightly. The dream is usually wiser than the interpretation.</p>
-        <ul>
-          <li><strong>Not a dictionary.</strong> A snake in your dream isn't the same as a snake in mine. Jung was wary of fixed symbol lists. Start with what the image means to you.</li>
-          <li><strong>Not fortune telling.</strong> Dreams speak about the inner situation. They aren't forecasts of events.</li>
-          <li><strong>Not a puzzle you solve once.</strong> A good dream can hold several meanings at once. Come back to it.</li>
-          <li><strong>Not forcing it.</strong> Jung reminded himself that he didn't understand a dream before he began. If nothing lands, let it be. Sometimes the meaning arrives days later, often on a walk.</li>
-          <li><strong>Not only about the past.</strong> Childhood and old patterns show up, but so does the present and what's trying to emerge.</li>
-          <li><strong>Not a replacement for support.</strong> If dreams stir up something heavy, recurring nightmares, or old trauma, bring them to a therapist or someone you trust. You don't have to sit with that alone.</li>
-        </ul>
-      </div>
-    </details>
-    <details>
-      <summary><h3>Signs and symbols</h3><span class="plus">+</span></summary>
-      <div class="g-body">
-        <p class="g-lead">A sign points to something known. A symbol points beyond what we can say.</p>
-        <p>Jung drew a clear line here. A road sign or a logo is a <em>sign</em>: it stands for something we already understand. A <em>symbol</em> carries more than words can hold. Part of it stays in shadow, and that's where its power comes from. Dream symbols aren't made up on purpose. They arise by themselves, the way mushrooms push up after rain.</p>
-        <p class="g-sub">How to tell a living symbol</p>
-        <ul>
-          <li><strong>It has charge.</strong> You feel something in the body. It grips, unsettles, or moves you.</li>
-          <li><strong>It won't sit still.</strong> Every explanation feels true but incomplete.</li>
-          <li><strong>It comes back.</strong> Recurring images are asking for attention. Tag them so they show up on the Symbols tab.</li>
-        </ul>
-        <p class="g-sub">Stay close to the image</p>
-        <p>Freud's free association lets one thought lead to the next, often far from the dream. Jung preferred to circle the image itself. What exactly does it look like? What does it remind you of? What does it do?</p>
-      </div>
-    </details>
-    <details>
-      <summary><h3>Myth and the bigger story</h3><span class="plus">+</span></summary>
-      <div class="g-body">
-        <p class="g-lead">Myths are humanity's shared dreams. Dreams are your personal myths.</p>
-        <p>Some dream images feel bigger than one life. A descent underground. A great tree. A journey into the belly of a beast. These turn up in myth, fairy tale and religion across the world. Jung linked them to <em>archetypes</em>: deep patterns in the psyche we all share, which take on different images in different cultures.</p>
-        <p class="g-sub">Amplification</p>
-        <p>When an image feels archetypal, Jung would widen the circle and look at how the same motif appears in myth and story.</p>
-        <ul>
-          <li><strong>The descent.</strong> Inanna, Persephone and Orpheus all go down into the underworld and come back changed.</li>
-          <li><strong>The night sea journey.</strong> Jonah swallowed by the great fish. Being held in the dark before rebirth.</li>
-          <li><strong>The world tree.</strong> Yggdrasil in Norse myth links the worlds above and below. A tree in a dream may be more than a tree.</li>
-        </ul>
-        <p class="g-sub">Go gently</p>
-        <p>Personal associations first, myth second. Myth widens the view. It doesn't replace your own meaning. Treat other cultures' stories with respect: borrow lightly and credit where they come from.</p>
-      </div>
-    </details>
-    <details id="g-twelve">
-      <summary><h3>Archetypes: Jung's core and the twelve</h3><span class="plus">+</span></summary>
-      <div class="g-body">
-        <p class="g-lead">Patterns, not boxes. They show up as people, animals, places and moods.</p>
-        <p>Jung saw archetypes as deep patterns we all share, not a fixed list. He wrote most about a handful of core figures.</p>
-        <p class="g-sub">Jung's core</p>
-        <ul>
-          <li><strong>Shadow.</strong> The parts of ourselves we reject or don't see. Often appears as someone who irritates, frightens or chases us. It holds gold as well as darkness.</li>
-          <li><strong>Anima / Animus.</strong> The inner other, often a figure of a different gender. A guide to feeling, depth and creativity.</li>
-          <li><strong>Persona.</strong> The mask we wear for the world. Dreams of clothes, uniforms or being exposed often point here.</li>
-          <li><strong>Self.</strong> The whole of us, the centre that holds it all. Can appear as a circle, a mandala, a wise figure or a sacred place.</li>
-        </ul>
-        <p class="g-sub">The twelve</p>
-        <p>The popular twelve archetypes come from Carol S. Pearson, building on Jung's ideas, in <em>Awakening the Heroes Within</em> and later <em>The Hero and the Outlaw</em> with Margaret Mark. Each has a gift and a shadow side.</p>
-        <ul>
-          <li><strong>Innocent.</strong> Trust, hope and goodness. Shadow: denial, not seeing what's real.</li>
-          <li><strong>Everyperson</strong> (also called the Orphan). Belonging, realism, being one of us. Shadow: losing yourself to fit in.</li>
-          <li><strong>Hero</strong> (or Warrior). Courage, rising to the challenge. Shadow: always needing a battle to prove your worth.</li>
-          <li><strong>Caregiver.</strong> Nurture and protection. Shadow: giving until you're empty.</li>
-          <li><strong>Explorer</strong> (or Seeker). Freedom and the call of the unknown. Shadow: restlessness, never landing.</li>
-          <li><strong>Rebel</strong> (or Outlaw). Breaking what no longer works. Shadow: destruction for its own sake.</li>
-          <li><strong>Lover.</strong> Intimacy, passion, beauty. Shadow: losing yourself in another.</li>
-          <li><strong>Creator.</strong> Imagination, making something new. Shadow: perfectionism.</li>
-          <li><strong>Jester</strong> (or Fool). Play, joy, living in the moment. Shadow: hiding pain behind a joke.</li>
-          <li><strong>Sage.</strong> Truth and understanding. Shadow: living in your head, cut off from feeling.</li>
-          <li><strong>Magician.</strong> Transformation, making things happen. Shadow: manipulation.</li>
-          <li><strong>Ruler.</strong> Order, responsibility, holding things together. Shadow: control for its own sake.</li>
-        </ul>
-        <p class="g-sub">Using them</p>
-        <ul>
-          <li>Tick any you notice in a dream figure, or in how you were in the dream.</li>
-          <li>Over time, the Symbols tab shows which archetypes visit you most.</li>
-          <li>Personal meaning first. If a figure doesn't fit any of these, tick Other and describe it in your own words.</li>
-        </ul>
-      </div>
-    </details>
-    <details>
-      <summary><h3>Working with a dream</h3><span class="plus">+</span></summary>
-      <div class="g-body">
-        <p class="g-lead">Six steps. No rush. Everything here is an invitation.</p>
-        <p>This loosely follows Robert A. Johnson's approach in <em>Inner Work</em>, with capture and feeling added at the start.</p>
-        <ul>
-          <li><strong>Write it down.</strong> As it was, in the present tense. Fragments count.</li>
-          <li><strong>Notice the feeling.</strong> Where is it in the body? Feeling is often the clearest thread back in.</li>
-          <li><strong>Associate.</strong> Take each image in turn. What does it mean to you?</li>
-          <li><strong>Connect.</strong> Where is this alive in your life right now? Which part of you might this figure be?</li>
-          <li><strong>Interpret, lightly.</strong> Ask what the dream might be balancing. Choose the meaning that surprises you over the one that flatters you.</li>
-          <li><strong>Honour it.</strong> Do something small and physical. Walk to the place it reminded you of. Light a candle. Sketch the image.</li>
-        </ul>
-        <p>The Capture section of each entry holds the first two steps. Reflect holds the rest.</p>
-      </div>
-    </details>
-    <details>
-      <summary><h3>Further reading</h3><span class="plus">+</span></summary>
-      <div class="g-body">
-        <p class="g-lead">Take what you need. Leave the rest on the shelf.</p>
-        <ul>
-          <li><strong>Man and His Symbols.</strong> Carl Jung and colleagues, 1964. The most accessible way in.</li>
-          <li><strong>Awakening the Heroes Within.</strong> Carol S. Pearson. The twelve archetypes, and how they shape a life.</li>
-          <li><strong>Inner Work.</strong> Robert A. Johnson, 1986. A practical, plain-spoken guide to dreams and active imagination.</li>
-          <li><strong>Memories, Dreams, Reflections.</strong> Carl Jung's late-life autobiography, full of his own dreams.</li>
-          <li><strong>Dreams.</strong> Carl Jung. His key essays on dreams, drawn from the Collected Works.</li>
-        </ul>
-        <p>rewildingtherapies.com</p>
-      </div>
-    </details>
-  </div>
-</template>
-
 <script>
 const CORE = ["Shadow", "Anima / Animus", "Persona", "Self"];
 const TWELVE = ["Innocent", "Everyperson", "Hero", "Caregiver", "Explorer", "Rebel", "Lover", "Creator", "Jester", "Sage", "Magician", "Ruler"];
@@ -504,6 +384,123 @@ async function removeDream(id) {
   go("journal");
 }
 
+/* ---------- Guide: click-through course ---------- */
+const COURSE_KEY = "top-dream-course-v1";
+const COURSE = [
+  { id: "start", title: "Getting started", lead: "How to use this journal, and keep your dreams safe.", cards: [
+    { h: "Capture first", b: `<p>Dreams fade fast. Most slip away within minutes of waking, so the trick is to catch them before your feet hit the floor.</p><p>Tap <strong>New dream</strong> on the Journal tab and write it rough, in the present tense: "I am walking through a house…" Fragments count. A single image or a feeling is enough. It saves as you type.</p>`, t: "Leave your phone, with this journal open, by the bed tonight." },
+    { h: "Reflect later", b: `<p>Capturing and reflecting are different jobs. Waking is for getting it down, not making sense of it.</p><p>Later, once you've had a brew, come back to the same dream and fill in the <strong>Reflect</strong> section: what was going on in your life, what each image means to you, any archetypes you notice, and what the dream might be asking of you.</p><p>No rush. Some dreams only open up days later.</p>` },
+    { h: "Track your symbols", b: `<p>In each dream, add a few words to <strong>Symbols to track</strong>, separated by commas. Water, house, stag.</p><p>Over the weeks, the <strong>Symbols</strong> tab shows which images keep coming back, and in which dreams. Patterns you'd never spot in one dream become obvious across twenty.</p>` },
+    { h: "Save it to your home screen", b: `<p>It then opens like an app, full screen, with the tree icon.</p><ul><li><strong>iPhone:</strong> open this page in Safari, tap <strong>Share</strong>, then <strong>Add to Home Screen</strong>.</li><li><strong>Android:</strong> open it in Chrome, tap the <strong>⋮</strong> menu, then <strong>Install app</strong> or <strong>Add to Home screen</strong>.</li></ul><p>Do this before you start, then always open it from the icon. On iPhone, the icon keeps its own copy of your dreams, separate from Safari.</p>` },
+    { h: "Keep your dreams safe", b: `<p>Your dreams are saved in this browser, on this device only. Nothing is sent anywhere.</p><p>That's private, but fragile. Clearing your browsing data, using a private window or changing phone will lose them.</p><p>Tap <strong>Export</strong> on the Journal tab every week or so, and always before you clear your data or change phone. Keep the file somewhere safe. It's a copy to read and keep.</p>` },
+  ]},
+  { id: "what", title: "What Jungian dream work is", lead: "A conversation with the part of you that doesn't speak in words.", cards: [
+    { h: "Listening, not decoding", b: `<p>Freud tended to see dreams as disguises: a hidden wish dressed up so we won't recognise it.</p><p>Jung saw it differently. For him the dream wasn't hiding anything. It was showing how things really stand inside, in the only language the unconscious has: images.</p><p>So the task isn't to crack a code. It's to listen, the way you'd listen to a friend who speaks in pictures.</p>` },
+    { h: "Dreams balance us", b: `<p>Jung noticed that dreams often balance a one-sided waking attitude. He called this <em>compensation</em>.</p><p>Push hard in one direction by day and the dream pulls the other way by night. The person who's always the capable one dreams of being a lost child. The person keeping everything calm dreams of a storm.</p><p>Jung once dreamt of a patient sitting high on a castle tower. He had to crane his neck to see her, and realised he'd been looking down on her.</p>`, t: "With your next dream, ask: what have I been leaning too hard into lately?" },
+    { h: "Your meaning comes first", b: `<p>Your own associations to an image matter more than anything a book says about it.</p><p>A dog might mean loyalty to one person and fear to another, depending on the dogs they've known.</p><p>Before you look anything up, ask: what does this mean to me? What does it remind me of? Where have I met it before?</p>` },
+    { h: "Two ways to read a figure", b: `<p>A figure in a dream can be the real person. Or it can be a part of you, wearing their face. Jung called these the objective and subjective levels.</p><p>Dream about your boss, and it might be about your boss. Or it might be about your inner boss: the part of you that drives and judges.</p><p>Try both readings, and notice which one lands in your body.</p>` },
+    { h: "Dreams look forward too", b: `<p>Some dreams point back at old wounds and patterns. Others seem to point towards what's trying to grow: a new direction, a quality you're ready to live.</p><p>It isn't prediction. It's more like a seed showing you what it might become.</p>` },
+    { h: "Read them as a series", b: `<p>One dream is a sentence. Twenty dreams start to tell a story.</p><p>Jung often worked with a long run of someone's dreams, watching figures change and themes develop over months. That's why this journal tracks symbols and links between dreams.</p><p>Keep going, even when single dreams make no sense.</p>`, t: "Use the Series box to link a dream to earlier ones that feel related." },
+  ]},
+  { id: "isnt", title: "What it isn't", lead: "Hold it lightly. The dream is usually wiser than the interpretation.", cards: [
+    { h: "Not a dictionary", b: `<p>A snake in your dream isn't the same as a snake in mine.</p><p>Jung was wary of fixed symbol lists. Dream dictionaries give one meaning for everyone, and that's exactly where they go wrong.</p><p>Start with what the image means to you. Myth and story can widen the view later.</p>` },
+    { h: "Not fortune telling", b: `<p>Dreams speak about the inner situation: how you're feeling, what you're avoiding, what's changing in you.</p><p>They aren't forecasts. A dream of a car crash is far more likely to be about something in your life feeling out of control than about a real car.</p>` },
+    { h: "Not something to force", b: `<p>Jung reminded himself that he didn't understand a dream before he began. Hold it lightly.</p><p>If nothing lands, let it be. Meaning often arrives days later, on a walk, in the shower, or halfway through a conversation.</p><p>A good dream can hold several meanings at once. Come back to it.</p>` },
+    { h: "Choose the surprise", b: `<p>If an interpretation only tells you what you already know, or makes you look good, keep looking.</p><p>Dreams tend to bring news, not repeat the headlines. The reading that's a little uncomfortable, or makes you go "oh", is often nearer the mark.</p>` },
+    { h: "Not a replacement for support", b: `<p>If dreams stir up something heavy, like recurring nightmares or old trauma, bring them to a therapist or someone you trust. You don't have to sit with that alone.</p><p>Dream work is powerful. It's fine to go slowly, or put it down for a while.</p>` },
+  ]},
+  { id: "symbols", title: "Signs and symbols", lead: "A sign points to something known. A symbol points beyond what we can say.", cards: [
+    { h: "Sign or symbol?", b: `<p>Jung drew a clear line here.</p><p>A road sign or a logo is a <em>sign</em>. It stands for something we already understand.</p><p>A <em>symbol</em> carries more than words can hold. Part of it always stays in shadow, and that's where its power comes from.</p>` },
+    { h: "They arise by themselves", b: `<p>We don't make dream symbols up on purpose. They arise by themselves, the way mushrooms push up after rain.</p><p>That's why they can surprise us, and why they often seem to know something we don't yet.</p>` },
+    { h: "How to spot a living symbol", b: `<ul><li><strong>It has charge.</strong> You feel something in the body. It grips, unsettles or moves you.</li><li><strong>It won't sit still.</strong> Every explanation feels true, but never quite enough.</li><li><strong>It comes back.</strong> Recurring images are asking for attention. Tag them so they show on the Symbols tab.</li></ul>` },
+    { h: "Stay close to the image", b: `<p>Freud's free association lets one thought lead to the next, often far from the dream.</p><p>Jung preferred to circle back to the image itself, again and again. Describe it as if to someone who's never seen one. What exactly does it look like? What does it do? What does it remind you of?</p>`, t: "Pick one image from a recent dream and describe it in five detailed sentences." },
+    { h: "Live with it", b: `<p>You don't have to explain a symbol to work with it.</p><p>Draw it. Walk with it. Notice where it turns up in waking life. Living alongside a symbol for a while often teaches more than analysing it.</p>` },
+  ]},
+  { id: "myth", title: "Myth and the bigger story", lead: "Myths are humanity's shared dreams. Dreams are your personal myths.", cards: [
+    { h: "Bigger than one life", b: `<p>Some dream images feel bigger than one person's life. A descent underground. A great tree. A journey into the belly of a beast.</p><p>These turn up in myth, fairy tale and religion across the world. Jung linked them to <em>archetypes</em>: deep patterns in the psyche we all share, which take on different images in different cultures.</p>` },
+    { h: "Amplification", b: `<p>When an image feels big and strange, Jung would widen the circle. He'd look at how the same motif appears in myth and story, to see what it might carry.</p><p>Personal associations always come first. Then ask: where else does this story live?</p>` },
+    { h: "The descent", b: `<p>Inanna, Persephone and Orpheus all go down into the underworld, and come back changed.</p><p>A dream of going underground, into a cellar, a cave or deep water, might belong to this old story: a time of going down before you can come back up.</p>` },
+    { h: "The dark and the tree", b: `<p><strong>The night sea journey.</strong> Jonah is swallowed by the great fish and held in the dark before being released. Being swallowed or enclosed in a dream can echo this: a pause before rebirth.</p><p><strong>The world tree.</strong> Yggdrasil in Norse myth links the worlds above and below. A tree in a dream may be more than a tree.</p>`, t: "Think of a fairy tale you loved as a child. Is any part of it alive in you now?" },
+    { h: "Go gently", b: `<p>Myth widens the view. It doesn't replace your own meaning.</p><p>And treat other cultures' stories with respect. Borrow lightly, and credit where they come from.</p>` },
+  ]},
+  { id: "core", title: "Jung's core archetypes", lead: "Patterns, not boxes. They show up as people, animals, places and moods.", cards: [
+    { h: "Patterns, not boxes", b: `<p>Jung saw archetypes as deep patterns we all share, not a fixed list. He wrote most about a handful of core figures.</p><p>They rarely announce themselves. They show up as people, animals, places and moods, and you recognise them by the feeling they carry.</p>` },
+    { h: "The Shadow", b: `<p>The parts of ourselves we reject, or simply don't see.</p><p>In dreams it often appears as someone who irritates, frightens or chases us. What annoys us most in other people can point here too.</p><p>The Shadow isn't only dark. It also holds gold: strengths we've disowned, like anger that could become healthy boundaries.</p>`, t: "Who makes you uneasy in your dreams? What quality do they have that you don't allow in yourself?" },
+    { h: "Anima / Animus", b: `<p>The inner other. Jung described it as a figure of a different gender to the dreamer, and many people still meet it that way.</p><p>It often appears as a mysterious stranger, a guide or a lover, leading towards feeling, depth and creativity.</p><p>Many people working with Jung today see it less in gender terms, and more as the inner figure that draws us towards what we haven't yet lived.</p>` },
+    { h: "The Persona", b: `<p>The mask we wear for the world. We all need one. It gets us through work, school and the supermarket.</p><p>Trouble comes when we confuse the mask with who we are.</p><p>Dreams of clothes, uniforms, or being naked or exposed in public often point here.</p>` },
+    { h: "The Self", b: `<p>The whole of us: the centre that holds everything, light and dark.</p><p>It can appear as a circle, a mandala, a precious stone, a wise figure, a special child or a sacred place.</p><p>Jung called the lifelong journey towards the Self <em>individuation</em>: becoming more fully who you are.</p>` },
+  ]},
+  { id: "twelve", title: "The twelve archetypes", lead: "Each has a gift, and a shadow side.", cards: [
+    { h: "Where the twelve come from", b: `<p>The popular twelve archetypes aren't Jung's own list. They come from Carol S. Pearson, building on his ideas, in <em>Awakening the Heroes Within</em>, and later <em>The Hero and the Outlaw</em> with Margaret Mark.</p><p>They're useful because each one has a gift and a shadow side. You'll see other names for some of them in brackets.</p>` },
+    { h: "Innocent, Everyperson, Hero", b: `<ul><li><strong>Innocent.</strong> Trust, hope, goodness. Shadow: denial, not seeing what's real.</li><li><strong>Everyperson</strong> (Orphan). Belonging, realism, being one of us. Shadow: losing yourself to fit in.</li><li><strong>Hero</strong> (Warrior). Courage, rising to a challenge. Shadow: always needing a battle to prove your worth.</li></ul>` },
+    { h: "Caregiver, Explorer, Rebel", b: `<ul><li><strong>Caregiver.</strong> Nurture and protection. Shadow: giving until you're empty.</li><li><strong>Explorer</strong> (Seeker). Freedom and the call of the unknown. Shadow: restlessness, never landing.</li><li><strong>Rebel</strong> (Outlaw). Breaking what no longer works. Shadow: destruction for its own sake.</li></ul>` },
+    { h: "Lover, Creator, Jester", b: `<ul><li><strong>Lover.</strong> Intimacy, passion, beauty. Shadow: losing yourself in another.</li><li><strong>Creator.</strong> Imagination, making something new. Shadow: perfectionism.</li><li><strong>Jester</strong> (Fool). Play, joy, living in the moment. Shadow: hiding pain behind a joke.</li></ul>` },
+    { h: "Sage, Magician, Ruler", b: `<ul><li><strong>Sage.</strong> Truth and understanding. Shadow: living in your head, cut off from feeling.</li><li><strong>Magician.</strong> Transformation, making things happen. Shadow: manipulation.</li><li><strong>Ruler.</strong> Order, responsibility, holding things together. Shadow: control for its own sake.</li></ul>` },
+    { h: "Using them", b: `<p>In the Reflect section, tick any you notice in a dream figure, or in how you were in the dream. The Symbols tab counts them over time.</p><p>If a figure doesn't fit, tick Other and describe it in your own words. Personal meaning first.</p>`, t: "Which of the twelve feels strongest in you right now? Which is missing?" },
+  ]},
+  { id: "work", title: "Working with a dream", lead: "Six steps. No rush. Everything here is an invitation.", cards: [
+    { h: "A simple path", b: `<p>This loosely follows Robert A. Johnson's four-step approach in <em>Inner Work</em>, with two steps added at the start: capturing the dream, and noticing the feeling.</p><p>The Capture section of each entry holds the first two steps. Reflect holds the rest.</p>` },
+    { h: "1. Write it down", b: `<p>As it was, in the present tense. Don't tidy it up, and don't explain it yet.</p><p>Include the odd details, the bits that don't fit, and how the dream ended. Fragments count.</p>` },
+    { h: "2. Notice the feeling", b: `<p>Where is the dream in your body? A tight chest, a lump in the throat, a strange lightness?</p><p>Feeling is often the clearest thread back into a dream, even when the story is gone.</p>` },
+    { h: "3. Associate", b: `<p>Take each image in turn. What does it mean to you? What does it remind you of?</p><p>Stay close to the image. Don't let one thought lead to the next until you're miles from the dream. Keep coming back.</p>` },
+    { h: "4. Connect", b: `<p>Where is this alive in your life right now?</p><p>Which part of you might this figure be? What's going on at work, at home, in your body, that the dream might be speaking to?</p>` },
+    { h: "5. Interpret, lightly", b: `<p>Ask what the dream might be balancing. Put it into a sentence or two.</p><p>Choose the meaning that surprises you over the one that flatters you. If it only tells you what you already know, keep looking.</p>` },
+    { h: "6. Honour it", b: `<p>Do something small and physical. Walk to the place the dream reminded you of. Light a candle. Sketch the image. Carry a stone.</p><p>This brings the dream into the body and into the world, and tells the deeper part of you that you're listening.</p>`, t: "Pick one small act to honour your next dream." },
+  ]},
+  { id: "reading", title: "Further reading", lead: "Take what you need. Leave the rest on the shelf.", cards: [
+    { h: "Where to go next", b: `<ul><li><strong>Man and His Symbols.</strong> Carl Jung and colleagues, 1964. The most accessible way in.</li><li><strong>Inner Work.</strong> Robert A. Johnson, 1986. A practical, plain-spoken guide to dreams and active imagination.</li><li><strong>Memories, Dreams, Reflections.</strong> Jung's late-life autobiography, full of his own dreams.</li><li><strong>Dreams.</strong> Carl Jung. His key essays on dreams.</li><li><strong>Awakening the Heroes Within.</strong> Carol S. Pearson. The twelve archetypes.</li></ul>` },
+    { h: "Come as you are", b: `<p>That's the course. Come back to any lesson whenever you need it.</p><p>If a dream stays with you, bring it to The Outdoor Practice community. Some images are easier to hold together.</p><p>rewildingtherapies.com</p>` },
+  ]},
+];
+const course = { lesson: null, card: 0, finished: false };
+function courseDone() { try { return new Set(JSON.parse(localStorage.getItem(COURSE_KEY)) || []); } catch (e) { return new Set(); } }
+function markDone(id) { const s = courseDone(); s.add(id); try { localStorage.setItem(COURSE_KEY, JSON.stringify([...s])); } catch (e) {} }
+function courseHTML() {
+  const done = courseDone();
+  if (!course.lesson) {
+    const n = COURSE.filter(l => done.has(l.id)).length;
+    const next = COURSE.find(l => !done.has(l.id)) || COURSE[0];
+    return `<div class="course">
+      <div class="c-head"><h2>The Guide</h2><p class="toast">${COURSE.length} short lessons on Jungian dream work. A few minutes each. Take them in order, or dip in.</p>
+        <div class="c-prog" role="progressbar" aria-valuemin="0" aria-valuemax="${COURSE.length}" aria-valuenow="${n}"><span style="width:${Math.round(n / COURSE.length * 100)}%"></span></div>
+        <div class="row spread"><span class="toast">${n} of ${COURSE.length} done</span><button class="btn primary" data-lesson="${next.id}">${n ? (n === COURSE.length ? "Start again" : "Continue") : "Start"}: ${esc(next.title)}</button></div></div>
+      <ol class="lessons">${COURSE.map((l, i) => `<li><button class="lesson-row" data-lesson="${l.id}">
+        <span class="l-num ${done.has(l.id) ? "done" : ""}" aria-hidden="true">${done.has(l.id) ? "✓" : i + 1}</span>
+        <span class="l-main"><span class="l-title">${esc(l.title)}</span><span class="l-sub">${esc(l.lead)}</span></span>
+        <span class="l-meta">${l.cards.length} cards${done.has(l.id) ? '<span class="sr"> · done</span>' : ""}</span></button></li>`).join("")}</ol></div>`;
+  }
+  const li = COURSE.findIndex(l => l.id === course.lesson), L = COURSE[li];
+  const top = `<div class="row spread"><button class="btn ghost" data-course="menu">← All lessons</button><span class="toast">Lesson ${li + 1} of ${COURSE.length}</span></div>`;
+  if (course.finished) {
+    const nx = COURSE[li + 1];
+    return `<div class="course">${top}<article class="c-card c-end"><span class="c-count">Lesson done</span><h3>${esc(L.title)}</h3><p>Nice work. Come back to it any time.</p>
+      <div class="row">${nx ? `<button class="btn primary" data-lesson="${nx.id}">Next: ${esc(nx.title)}</button>` : ""}<button class="btn" data-course="journal">Back to the journal</button><button class="btn ghost" data-course="menu">All lessons</button></div></article></div>`;
+  }
+  const C = L.cards[course.card], last = course.card === L.cards.length - 1;
+  return `<div class="course">${top}
+    <div class="c-lesson"><h2>${esc(L.title)}</h2><p class="c-lead">${esc(L.lead)}</p></div>
+    <article class="c-card" id="c-card" aria-live="polite">
+      <span class="c-count">${course.card + 1} of ${L.cards.length}</span>
+      <h3>${esc(C.h)}</h3><div class="c-body">${C.b}</div>
+      ${C.t ? `<div class="c-try"><span>Try this</span><p>${esc(C.t)}</p></div>` : ""}
+    </article>
+    <div class="c-dots" aria-hidden="true">${L.cards.map((_, i) => `<i class="${i === course.card ? "on" : i < course.card ? "past" : ""}"></i>`).join("")}</div>
+    <div class="row spread"><button class="btn" data-course="back" ${course.card === 0 ? "disabled" : ""}>Back</button>
+      <button class="btn primary" data-course="next">${last ? "Finish lesson" : "Next"}</button></div>
+  </div>`;
+}
+function openLesson(id, card) { course.lesson = id; course.card = card || 0; course.finished = false; go("guide"); }
+function courseNav(dir) {
+  const L = COURSE.find(l => l.id === course.lesson); if (!L || course.finished) return;
+  if (dir > 0) { if (course.card < L.cards.length - 1) course.card++; else { markDone(L.id); course.finished = true; } }
+  else if (course.card > 0) course.card--;
+  render(); const c = document.getElementById("c-card") || document.querySelector(".c-end"); if (c) c.scrollIntoView({ block: "nearest" });
+}
+let touchX = null;
+document.addEventListener("touchstart", e => { if (state.view === "guide" && course.lesson && e.target.closest(".c-card")) touchX = e.touches[0].clientX; }, { passive: true });
+document.addEventListener("touchend", e => { if (touchX === null) return; const dx = e.changedTouches[0].clientX - touchX; touchX = null; if (Math.abs(dx) > 50) courseNav(dx < 0 ? 1 : -1); });
+document.addEventListener("keydown", e => { if (state.view !== "guide" || !course.lesson || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return; if (e.key === "ArrowRight") courseNav(1); if (e.key === "ArrowLeft") courseNav(-1); });
+
 /* ---------- Navigation ---------- */
 function go(view) {
   if (state.view === "edit" && view !== "edit") flush();
@@ -537,7 +534,7 @@ function render() {
   if (state.mode === "loading") { v.innerHTML = `<p class="toast">Opening your journal…</p>`; return; }
   if (state.view === "journal") v.innerHTML = journalHTML();
   else if (state.view === "symbols") v.innerHTML = symbolsHTML();
-  else if (state.view === "guide") { v.innerHTML = ""; v.appendChild($("#guide-tpl").content.cloneNode(true)); }
+  else if (state.view === "guide") v.innerHTML = courseHTML();
   else if (state.view === "edit") { v.innerHTML = editHTML(); bindEditor(); }
 }
 
@@ -552,7 +549,7 @@ function journalHTML() {
       <div class="empty">
         <h3>Nothing here yet</h3>
         <p>Your dreams will gather here, newest first, with their key image and any archetypes you noticed. Tap <strong>New dream</strong> the moment you wake. Capture it rough, then come back later to reflect.</p>
-        <p>New to this? The <strong>Guide</strong> tab starts with how to use this journal, then six short pages on Jungian dream work.</p>
+        <p>New to this? The <strong>Guide</strong> tab is a short course: how to use this journal, then bite-size lessons on Jungian dream work.</p>
       </div></div>${exportStatus()}`;
   }
   const total = sorted();
@@ -687,7 +684,15 @@ function exportText() {
 
 document.addEventListener("click", async e => {
   const tab = e.target.closest(".tab"); if (tab) { go(tab.dataset.view); return; }
-  const gl = e.target.closest("[data-guide]"); if (gl) { e.preventDefault(); go("guide"); const d = document.getElementById(gl.dataset.guide); if (d) { d.open = true; d.scrollIntoView({ block: "start" }); } return; }
+  const gl = e.target.closest("[data-guide]"); if (gl) { e.preventDefault(); flush(); openLesson("twelve", 0); return; }
+  const ls = e.target.closest("[data-lesson]"); if (ls) { openLesson(ls.dataset.lesson, 0); return; }
+  const cc = e.target.closest("[data-course]"); if (cc) {
+    const k = cc.dataset.course;
+    if (k === "menu") { course.lesson = null; course.finished = false; render(); window.scrollTo({ top: 0 }); }
+    else if (k === "journal") { course.lesson = null; course.finished = false; go("journal"); }
+    else courseNav(k === "next" ? 1 : -1);
+    return;
+  }
   if (e.target.closest("#new")) { newDream(); return; }
   const item = e.target.closest(".item"); if (item) { openDream(item.dataset.id); return; }
   if (e.target.closest("#export")) {
